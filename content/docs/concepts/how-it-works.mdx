@@ -23,7 +23,7 @@ The soundtrack is extracted to a 16 kHz mono WAV. Whisper needs that format, and
 
 ## 3. Transcribe
 
-Whisper runs on the Apple GPU through Metal with greedy decoding and no carry-over context between segments. The ggml model downloads once to `~/.clipforge/models`.
+Whisper runs through whisper.cpp with greedy decoding and no carry-over context between segments. The backend is Metal on the Apple GPU on a Mac, and the CPU on Linux, or CUDA on an NVIDIA GPU when built with `--features cuda`. Settings and the job log show which one is in use. The ggml model downloads once to `~/.clipforge/models`.
 
 Whisper reports token timestamps, and shardreel merges tokens into words: a token starting with a space begins a new word, so contractions like "Let's" stay whole. Segments with no words, or with a single character, are dropped. They are almost always hallucinations on silence, such as a lone "you".
 
@@ -42,6 +42,6 @@ Signals, speech rate and hype words become one excitement curve, and the highest
 
 ## 6. Render
 
-Each clip is cut from the source and rendered at 1080x1920 with an ffmpeg filter graph chosen by the layout. Captions and the hook are added as an ASS subtitle file through libass. Audio is loudness-normalised and encoded as AAC. Video uses the hardware H.264 or HEVC encoder, yuv420p, at the source frame rate capped at 60.
+Each clip is cut from the source and rendered at 1080x1920 with an ffmpeg filter graph chosen by the layout. Captions and the hook are added as an ASS subtitle file through libass. Audio is loudness-normalised and encoded as AAC. Video uses H.264 or HEVC, with VideoToolbox on a Mac, NVENC on Linux with an NVIDIA GPU, and libx264 or libx265 otherwise, yuv420p, at the source frame rate capped at 60.
 
 When the tag is on, `Built with shardreel`, the title and the caption are written into the file metadata. Several clips render in parallel. A thumbnail is grabbed at each clip's peak, and `clips.json` is written last.

@@ -25,7 +25,7 @@ Browsers upload every byte, so for multi-gigabyte recordings enter the path inst
 | Min length | 15 s | Shortest allowed clip |
 | Target | 30 s | Preferred clip length |
 | Max length | 60 s | Longest allowed clip |
-| Output folder | `~/Movies/clipforge` | Clips go in a subfolder named after the video |
+| Output folder | `~/Movies/clipforge` on Mac, `~/Videos/clipforge` on Linux and WSL2 | Clips go in a subfolder named after the video |
 
 Lengths must satisfy min, then target, then max. The form rejects anything else.
 
@@ -46,9 +46,9 @@ Turn speech recognition off for silent gameplay. Captions are then unavailable, 
 | Option | Default | Notes |
 | --- | --- | --- |
 | Codec | H.264 | HEVC gives smaller files |
-| Quality | High | High, medium and low map to 12, 8 and 5 Mbit/s on the hardware encoder |
+| Quality | High | High, medium and low map to 12, 8 and 5 Mbit/s on a hardware encoder |
 | Parallel renders | 3 | Clips rendered at the same time |
-| Software encoding | Off | Forces libx264 or libx265 instead of the media engine |
+| Software encoding | Off | Forces libx264 or libx265 instead of the hardware encoder. Linux and WSL2 only. On a Mac, hardware encoding is always on and this option is hidden |
 | Fresh analysis | Off | Ignore cached transcript, signals and picks |
 
 Overlay and layout options have their own guides: [Layouts and facecam](/docs/guides/layouts) and [Captions and hooks](/docs/guides/captions-and-hooks).

@@ -9,6 +9,7 @@
     "env-file",
     "rerender",
     "downloads",
+    "linux-and-wsl",
     "storage"
   ]
 }

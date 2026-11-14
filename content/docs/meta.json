@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "getting-started",
+    "requirements",
     "guides",
     "concepts",
     "reference",

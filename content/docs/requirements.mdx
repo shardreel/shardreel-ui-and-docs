@@ -1,0 +1,42 @@
+---
+title: Requirements
+description: Supported platforms and the minimum disk, memory and CPU shardreel needs on macOS, Linux and WSL2.
+---
+
+shardreel runs on Apple Silicon Macs and on Linux, including Windows through WSL2. Intel Macs are not supported.
+
+## Hardware and storage
+
+shardreel checks these at startup and shows them in **Settings > System**. Below the minimum for disk or RAM, it refuses to start a job. Fewer than 4 cores only shows a warning.
+
+| Resource | Minimum | Recommended |
+| --- | --- | --- |
+| Free disk (in `~/.clipforge`) | 10 GB | 30 GB |
+| RAM | 8 GB | 16 GB |
+| CPU cores | 4 (warning only) | 8 |
+| GPU | None on Linux (slow). Apple Silicon on a Mac | NVIDIA GPU on Linux |
+
+The Whisper model alone is about 1.6 GB. Source videos, the analysis cache and rendered clips need the rest. See [Free disk space](/docs/guides/storage).
+
+## What runs where
+
+| Stage | macOS (Apple Silicon) | Linux and WSL2 |
+| --- | --- | --- |
+| Transcription | Metal GPU | CPU, or CUDA with `--features cuda` |
+| Encoding | VideoToolbox, always on | NVENC if `nvidia-smi` works and ffmpeg has `h264_nvenc`, otherwise libx264 or libx265 |
+| Default output folder | `~/Movies/clipforge` | `~/Videos/clipforge` |
+| Software encoding option | Hidden, hardware is always used | Available |
+
+Intel and AMD GPU encoding (VAAPI) is not supported.
+
+## Software
+
+| Tool | Why it is needed |
+| --- | --- |
+| Rust toolchain | Builds the backend |
+| bun | Builds the web UI |
+| cmake | Builds whisper.cpp |
+| ffmpeg with libass | Decoding, filters, encoding, and burned-in captions |
+| yt-dlp | Downloading videos from URLs |
+
+Install steps for each platform are in [Getting started](/docs/getting-started).

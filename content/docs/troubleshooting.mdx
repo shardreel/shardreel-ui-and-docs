@@ -8,16 +8,17 @@ description: Fixes for the problems you are most likely to hit.
 The log says `this ffmpeg has no libass: captions skipped`. Your ffmpeg lacks libass. Install the full build and re-run:
 
 ```bash
-brew install ffmpeg-full
+brew install ffmpeg-full   # macOS
+sudo apt install ffmpeg    # Linux, most builds include libass
 ```
 
-shardreel prefers it automatically. Settings then shows the libass check as OK.
+On a Mac, shardreel prefers it automatically. Settings then shows the libass check as OK.
 
 ## A URL download fails
 
 An error such as `HTTP Error 403: Forbidden` comes from the site, not from shardreel. Try these in order:
 
-1. Update yt-dlp: `brew upgrade yt-dlp`.
+1. Update yt-dlp: `brew upgrade yt-dlp` on a Mac, or `pipx upgrade yt-dlp` on Linux.
 2. Try again later, since some sites throttle or change often.
 3. Download the video yourself and use its **local path** instead.
 
@@ -70,3 +71,15 @@ The Vite dev server proxies to port 8787, so for UI development either keep the 
 ## Clearing space fails with a conflict
 
 Storage clearing is blocked while a job is queued or running. Wait for it to finish.
+
+## A job is refused because of disk or memory
+
+shardreel blocks a job when free disk is under 10 GB or RAM is under 8 GB. Free up space (see [Storage](/docs/guides/storage)), or on WSL2 and Docker raise the memory limit. Fewer than 4 CPU cores only warns. See [Requirements](/docs/requirements).
+
+## Transcription is slow on Linux
+
+Without a GPU, Whisper runs on the CPU. With an NVIDIA GPU and the CUDA toolkit, rebuild with `cargo run --release --features cuda`. Use the `small` model for a faster, less accurate run.
+
+## WSL2 is slow or shows a path warning
+
+The project or `~/.clipforge` is under `/mnt/c`. Move them to the Linux filesystem, for example `/home/you`.

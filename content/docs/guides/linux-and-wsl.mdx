@@ -1,0 +1,62 @@
+---
+title: Linux and WSL2
+description: Run shardreel on Linux or on Windows through WSL2, enable CUDA, and test it in a Docker container.
+---
+
+## Linux
+
+Install the tools from [Getting started](/docs/getting-started), then build and run as usual. Transcription runs on the CPU by default, so expect it to be slower than on a Mac.
+
+### GPU transcription with CUDA
+
+With an NVIDIA GPU and the CUDA toolkit installed, build with the `cuda` feature:
+
+```bash
+cargo run --release --features cuda
+```
+
+The job log and Settings show the backend in use: Metal, CUDA or CPU.
+
+### Encoding
+
+shardreel uses NVENC automatically when `nvidia-smi` works and ffmpeg has `h264_nvenc`. Otherwise it uses libx264 or libx265. You can force software encoding in the job options.
+
+## Windows through WSL2
+
+Use WSL2 with an Ubuntu distro and follow the Linux steps inside it.
+
+- Keep the project and `~/.clipforge` on the Linux filesystem (`/home/you`), not under `/mnt/c`. File access through `/mnt` is much slower, and Settings shows a warning if you use it.
+- For GPU support, install the NVIDIA Windows driver with WSL support. Do not install a Linux GPU driver inside WSL.
+- Open `http://127.0.0.1:8787` in your Windows browser. WSL2 forwards localhost.
+- If the disk or memory checks fail, raise the limits in `%UserProfile%\.wslconfig`.
+
+## Test in Docker
+
+You can try the Linux build in a throwaway container from the project root. It needs the web UI built first (`cd web && bun install && bun run build`).
+
+```bash
+docker run --rm -it -p 127.0.0.1:8787:8787 \
+  -v "$PWD":/src \
+  -v clipforge-target:/target \
+  -v clipforge-registry:/usr/local/cargo/registry \
+  -e CARGO_TARGET_DIR=/target \
+  -e CLIPFORGE_ADDR=0.0.0.0:8787 \
+  -w /src rust:latest \
+  bash -c 'apt-get update && apt-get install -y cmake pkg-config libclang-dev ffmpeg && cargo run'
+```
+
+Then check it from another terminal:
+
+```bash
+curl -s http://127.0.0.1:8787/api/health
+```
+
+Expect `"platform": "linux"`, the CPU Whisper backend, libx264 encoding and a `preflight` block.
+
+Limits of this test:
+
+- If Docker has less than 8 GB of RAM, the memory check fails and jobs are blocked. Raise it in Docker settings.
+- There is no GPU in the container, so NVENC and CUDA cannot be tested.
+- WSL detection does not trigger in a container.
+- yt-dlp is not installed by this command, so the yt-dlp check shows Missing. Local files still work.
+- The first job downloads the 1.6 GB Whisper model into the container, and `--rm` discards it when the container exits.

@@ -9,7 +9,7 @@ These are the fields of the `options` object sent when creating or re-rendering 
 
 | Field | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `out` | string | `~/Movies/clipforge` | Output folder |
+| `out` | string | `~/Movies/clipforge` (Mac), `~/Videos/clipforge` (Linux, WSL2) | Output folder |
 | `max_clips` | number | `8` | Clip count |
 | `min_len` | number | `15` | Seconds |
 | `max_len` | number | `60` | Seconds |
@@ -52,6 +52,6 @@ These are the fields of the `options` object sent when creating or re-rendering 
 | `embed_tag` | boolean | `true` | Writes the shardreel metadata tag, see [Captions and hooks](/docs/guides/captions-and-hooks) |
 | `codec` | `h264` \| `hevc` | `h264` | |
 | `quality` | `high` \| `medium` \| `low` | `high` | 12, 8 and 5 Mbit/s on hardware |
-| `software` | boolean | `false` | libx264 or libx265, CRF 19, 22 or 25 |
+| `software` | boolean | `false` | libx264 or libx265, CRF 19, 22 or 25. Ignored on macOS, where hardware encoding is always used |
 | `workers` | number | `3` | Parallel renders |
 | `fresh` | boolean | `false` | Ignore caches |

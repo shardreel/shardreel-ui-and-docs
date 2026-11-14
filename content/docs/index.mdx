@@ -5,7 +5,7 @@ description: What shardreel does and how these docs are organised.
 
 shardreel turns long gameplay recordings into vertical 9:16 clips for Shorts, Reels and TikTok. Point it at a video, and it finds the peak moments, adds word-by-word captions, and renders ready-to-upload files.
 
-It runs on Apple Silicon Macs only. Transcription uses Whisper on the GPU through Metal, and encoding uses the Mac media engine through VideoToolbox. There is no cloud renderer and no subscription. An AI model is optional, and only used to rank candidates and write titles.
+It runs on Apple Silicon Macs and on Linux, including Windows through WSL2. On a Mac, Whisper uses the GPU through Metal and encoding uses the media engine through VideoToolbox. On Linux, Whisper runs on the CPU (or an NVIDIA GPU with CUDA) and encoding uses NVENC when available, otherwise libx264 or libx265. See [Requirements](/docs/requirements). There is no cloud renderer and no subscription. An AI model is optional, and only used to rank candidates and write titles.
 
 ## What you get
 

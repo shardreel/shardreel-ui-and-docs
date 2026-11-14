@@ -32,7 +32,7 @@ export function Hero() {
         <Logo size={56} className="mb-8" />
         <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-fd-border bg-fd-background px-3 py-1 font-mono text-xs text-fd-muted-foreground">
           <span className="size-1.5 rounded-full bg-fd-foreground" />
-          Apple Silicon only. No cloud renderer.
+          Mac, Linux and WSL2. No cloud renderer.
         </span>
         <h1 className="max-w-3xl text-5xl font-semibold tracking-tighter text-balance sm:text-7xl">
           Hours of gameplay in.
@@ -41,7 +41,7 @@ export function Hero() {
         </h1>
         <p className="mt-6 max-w-xl text-lg text-fd-muted-foreground text-pretty">
           shardreel finds the peak moments in long recordings and cuts them into captioned 9:16 clips for
-          Shorts, Reels and TikTok. Transcription, analysis and encoding all run on your Mac.
+          Shorts, Reels and TikTok. Transcription, analysis and encoding all run on your own machine.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link
@@ -184,7 +184,7 @@ export function AppPreview() {
 
 const PIPELINE = [
   ['01', 'Fetch', 'A local file, an upload, or a YouTube or Twitch URL through yt-dlp, with a live download bar.'],
-  ['02', 'Transcribe', 'Whisper large-v3-turbo on the Apple GPU through Metal, with word-level timestamps.'],
+  ['02', 'Transcribe', 'Whisper large-v3-turbo with word-level timestamps: Metal on a Mac, CPU or CUDA on Linux.'],
   ['03', 'Analyse', 'Per-second loudness spikes and on-screen action from scene-change scores.'],
   ['04', 'Pick', 'Peaks become windows with build-up before and payoff after, snapped to sentences and cuts.'],
   ['05', 'Rank', 'Optional. A model re-ranks within guard rails and writes the title, hook and hashtags.'],
@@ -310,7 +310,7 @@ export function Layouts() {
 /* ---------- Features ---------- */
 
 const FEATURES = [
-  ['Native on Apple Silicon', 'Whisper runs on the GPU through Metal. Encoding uses the media engine through VideoToolbox. Nothing leaves your Mac unless you turn on an AI model.'],
+  ['Mac, Linux and WSL2', 'On Apple Silicon, Whisper uses Metal and encoding uses VideoToolbox. On Linux, Whisper runs on the CPU or CUDA and encoding uses NVENC or x264. Nothing leaves your machine unless you turn on an AI model.'],
   ['Finds the peak', 'Loudness spikes, on-screen action, speech pace and hype words combine into one excitement curve. Silence never wins.'],
   ['Captions that follow the voice', 'Word-by-word highlighted captions and a hook banner, burned in with libass from real word timestamps.'],
   ['AI ranking, optional', 'Gemini, OpenRouter, LM Studio or Ollama can re-rank candidates and write titles. If the model fails, the run finishes on signals alone.'],

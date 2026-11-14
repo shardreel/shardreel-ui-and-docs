@@ -2,7 +2,7 @@ import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import type { Metadata, Viewport } from 'next';
-import { appName, siteDescription, siteKeywords, siteTagline, siteUrl } from '@/lib/shared';
+import { appName, githubUrl, siteDescription, siteKeywords, siteTagline, siteUrl } from '@/lib/shared';
 import './global.css';
 
 export const metadata: Metadata = {
@@ -71,14 +71,17 @@ const jsonLd = {
       description: siteDescription,
       applicationCategory: 'MultimediaApplication',
       applicationSubCategory: 'Video clipping and editing',
-      operatingSystem: 'macOS (Apple Silicon)',
+      operatingSystem: 'macOS (Apple Silicon), Linux, Windows (WSL2)',
+      license: 'https://opensource.org/license/mit',
+      isAccessibleForFree: true,
+      codeRepositoryUrl: githubUrl,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       featureList: [
         'Detects peak moments in long gameplay recordings',
-        'Word-by-word captions with Whisper on Apple GPU',
+        'Word-by-word captions with Whisper (Metal on Mac, CPU or CUDA on Linux)',
         'Renders 1080x1920 9:16 clips for Shorts, Reels and TikTok',
         'Optional AI ranking and titles',
-        'Runs fully local, no cloud renderer',
+        'Runs fully local on macOS, Linux and WSL2, no cloud renderer',
       ],
     },
   ],

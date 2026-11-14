@@ -1,6 +1,6 @@
 # shardreel-site
 
-Landing page and documentation for **shardreel**, a local tool that turns long gameplay recordings into vertical 9:16 clips on Apple Silicon.
+Landing page and documentation for **shardreel**, a local tool that turns long gameplay recordings into vertical 9:16 clips on Apple Silicon Macs and Linux (including WSL2).
 
 Built with Next.js, Fumadocs and Tailwind. Package manager: bun.
 

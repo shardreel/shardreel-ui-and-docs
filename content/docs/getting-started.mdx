@@ -1,10 +1,10 @@
 ---
 title: Getting started
-description: Clone the open-source repo, install the requirements, build shardreel and run your first job on your Mac.
+description: Clone the open-source repo, install the requirements, build shardreel and run your first job on a Mac, Linux or Windows with WSL2.
 ---
 
-<Callout type="warn" title="Apple Silicon only">
-shardreel targets M-series Macs. It relies on Metal for Whisper and VideoToolbox for encoding.
+<Callout type="info" title="Supported platforms">
+Apple Silicon Macs, and Linux (Debian or Ubuntu), including Windows through WSL2. Intel Macs are not supported. Check the [hardware and storage requirements](/docs/requirements) first. shardreel refuses to start a job below the disk or RAM minimum.
 </Callout>
 
 shardreel is open source. You run it from a local clone of the repository: [github.com/shardreel/clipforge](https://github.com/shardreel/clipforge).
@@ -24,6 +24,9 @@ shardreel is open source. You run it from a local clone of the repository: [gith
 
 ### Install the command-line tools
 
+<Tabs items={['macOS', 'Linux', 'Windows (WSL2)']}>
+<Tab value="macOS">
+
 ```bash
 brew install cmake yt-dlp ffmpeg-full
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -31,6 +34,26 @@ curl -fsSL https://bun.sh/install | bash
 ```
 
 `ffmpeg-full` is a keg-only build that includes libass. It does not replace an ffmpeg you already have. shardreel looks for it in `/opt/homebrew/opt/ffmpeg-full/bin` first and falls back to your `PATH`.
+
+</Tab>
+<Tab value="Linux">
+
+```bash
+sudo apt install build-essential cmake pkg-config libclang-dev ffmpeg pipx
+pipx install yt-dlp
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -fsSL https://bun.sh/install | bash
+```
+
+Transcription runs on the CPU by default. With an NVIDIA GPU and the CUDA toolkit, build with `cargo run --release --features cuda`. See [Linux and WSL2](/docs/guides/linux-and-wsl).
+
+</Tab>
+<Tab value="Windows (WSL2)">
+
+Install WSL2 with an Ubuntu distro, open its terminal and follow the Linux steps inside it. Keep the project on the Linux filesystem, not under `/mnt/c`. See [Linux and WSL2](/docs/guides/linux-and-wsl).
+
+</Tab>
+</Tabs>
 
 </Step>
 <Step>
@@ -75,7 +98,7 @@ clipforge listening on http://127.0.0.1:8787
 
 ### Check the setup
 
-Open `http://127.0.0.1:8787` and go to **Settings**. The System card lists each requirement as OK or Missing, with the command that fixes it.
+Open `http://127.0.0.1:8787` and go to **Settings**. The System card shows your platform, the disk, memory and CPU checks, and each tool as OK or Missing, with the command that fixes it.
 
 </Step>
 </Steps>
@@ -89,7 +112,7 @@ Open `http://127.0.0.1:8787` and go to **Settings**. The System card lists each 
 
 The first job with speech recognition downloads the Whisper model, about 1.6 GB for the default `large-v3-turbo`, into `~/.clipforge/models`. Later runs reuse it.
 
-Clips are saved to `~/Movies/clipforge/` by default, in a folder named after the video. Change the output folder per job.
+Clips are saved to `~/Movies/clipforge/` on a Mac and `~/Videos/clipforge/` on Linux and WSL2 by default, in a folder named after the video. Change the output folder per job.
 
 ## Update to the latest version
 
@@ -115,7 +138,7 @@ Open `http://localhost:5173`. Vite proxies `/api` to the backend on port 8787.
 
 ## Contribute
 
-Found a bug or want a feature? [Open an issue](https://github.com/shardreel/clipforge/issues) or send a pull request. Fork the repo, create a branch, run `cargo run --release` and `cd web && bun run dev` to test your change, then open a PR against `main`. If something fails during setup, check [Troubleshooting](/docs/troubleshooting) first.
+shardreel is MIT licensed. Found a bug or want a feature? Read the [contributing guide](https://github.com/shardreel/clipforge/blob/main/CONTRIBUTING.md), then [open an issue](https://github.com/shardreel/clipforge/issues) or send a pull request. To report a vulnerability, follow the [security policy](https://github.com/shardreel/clipforge/blob/main/SECURITY.md) instead of opening a public issue. Fork the repo, create a branch, run `cargo run --release` and `cd web && bun run dev` to test your change, then open a PR against `main`. If something fails during setup, check [Troubleshooting](/docs/troubleshooting) first.
 
 ## Next steps
 

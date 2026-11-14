@@ -9,7 +9,7 @@ The backend serves a JSON API under `/api`. Errors return a JSON body such as `{
 
 | Method and path | Purpose |
 | --- | --- |
-| `POST /api/jobs` | Create a job. Body: `{ "source": "...", "options": { ... } }`. Options are optional and partial |
+| `POST /api/jobs` | Create a job. Body: `{ "source": "...", "options": { ... } }`. Options are optional and partial. Rejected if the hardware preflight fails (disk or RAM below the minimum) |
 | `GET /api/jobs` | List jobs, newest first, without their logs |
 | `GET /api/jobs/{id}` | One job, with log and clips |
 | `GET /api/jobs/{id}/events` | Live event stream, see below |
@@ -70,7 +70,7 @@ For a job that has already finished, the stream sends only the snapshot.
 | `GET /api/defaults` | Default options, with your saved provider and niche applied |
 | `GET /api/settings` | Settings without keys, plus `has_gemini_key` and `has_openrouter_key` |
 | `PUT /api/settings` | Update any of `llm`, `llm_model`, `base_url`, `niche`, `gemini_api_key`, `openrouter_api_key`. An empty string clears a key or an optional value |
-| `GET /api/health` | Tool and hardware checks: ffmpeg, ffprobe, yt-dlp, libass, encoder, Whisper model |
+| `GET /api/health` | Tool and hardware checks: `platform` (macos, linux or wsl), ffmpeg, ffprobe, yt-dlp, libass, encoder, Whisper backend and model, and a `preflight` block with disk, memory and CPU core checks. This replaces the old `apple_silicon` field |
 
 ## Storage
 
