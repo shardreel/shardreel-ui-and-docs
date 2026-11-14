@@ -15,6 +15,10 @@ bun run start    # serve the production build
 
 Set `NEXT_PUBLIC_SITE_URL` to your deployed URL so social-card links resolve.
 
+## Analytics
+
+The site uses [PostHog](https://posthog.com) for pageviews, clicks and time on page. It is off unless `NEXT_PUBLIC_POSTHOG_KEY` is set. Copy `.env.example` to `.env.local`, add your project key from PostHog, and use `NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com` for an EU project. Anonymous visitors get no person profile, and Do Not Track is respected. Rebuild after changing the variables, since `NEXT_PUBLIC_*` values are baked in at build time.
+
 ## Layout
 
 | Path | What it is |
