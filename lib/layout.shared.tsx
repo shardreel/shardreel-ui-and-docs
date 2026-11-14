@@ -12,5 +12,6 @@ export function baseOptions(): BaseLayoutProps {
       { text: 'How it works', url: '/docs/concepts/how-it-works' },
       { text: 'Reference', url: '/docs/reference/options', active: 'nested-url' },
     ],
+    githubUrl: 'https://github.com/shardreel/clipforge',
   };
 }

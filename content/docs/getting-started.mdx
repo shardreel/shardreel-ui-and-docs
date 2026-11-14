@@ -1,11 +1,13 @@
 ---
 title: Getting started
-description: Install the requirements, build shardreel and run your first job.
+description: Clone the open-source repo, install the requirements, build shardreel and run your first job on your Mac.
 ---
 
 <Callout type="warn" title="Apple Silicon only">
 shardreel targets M-series Macs. It relies on Metal for Whisper and VideoToolbox for encoding.
 </Callout>
+
+shardreel is open source. You run it from a local clone of the repository: [github.com/shardreel/clipforge](https://github.com/shardreel/clipforge).
 
 ## Requirements
 
@@ -29,6 +31,18 @@ curl -fsSL https://bun.sh/install | bash
 ```
 
 `ffmpeg-full` is a keg-only build that includes libass. It does not replace an ffmpeg you already have. shardreel looks for it in `/opt/homebrew/opt/ffmpeg-full/bin` first and falls back to your `PATH`.
+
+</Step>
+<Step>
+
+### Clone the repository
+
+```bash
+git clone https://github.com/shardreel/clipforge.git
+cd clipforge
+```
+
+To pin a release instead of the latest `main`, run `git tag` and `git checkout <tag>`.
 
 </Step>
 <Step>
@@ -77,6 +91,17 @@ The first job with speech recognition downloads the Whisper model, about 1.6 GB 
 
 Clips are saved to `~/Movies/clipforge/` by default, in a folder named after the video. Change the output folder per job.
 
+## Update to the latest version
+
+```bash
+cd clipforge
+git pull
+cd web && bun install && bun run build && cd ..
+cargo run --release
+```
+
+Your settings, models and cache live in `~/.clipforge`, so updating does not touch them.
+
 ## Develop the UI
 
 Run the backend and the Vite dev server side by side:
@@ -87,6 +112,10 @@ cd web && bun run dev
 ```
 
 Open `http://localhost:5173`. Vite proxies `/api` to the backend on port 8787.
+
+## Contribute
+
+Found a bug or want a feature? [Open an issue](https://github.com/shardreel/clipforge/issues) or send a pull request. Fork the repo, create a branch, run `cargo run --release` and `cd web && bun run dev` to test your change, then open a PR against `main`. If something fails during setup, check [Troubleshooting](/docs/troubleshooting) first.
 
 ## Next steps
 

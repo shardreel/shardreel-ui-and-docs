@@ -73,7 +73,9 @@ function Terminal() {
         <span className="ml-3 font-mono text-xs text-fd-muted-foreground">terminal</span>
       </div>
       <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-6">
-        <span className="text-fd-muted-foreground">$ </span>cd web && bun install && bun run build
+        <span className="text-fd-muted-foreground">$ </span>git clone https://github.com/shardreel/clipforge.git && cd clipforge
+        {'\n'}
+        <span className="text-fd-muted-foreground">$ </span>cd web && bun install && bun run build && cd ..
         {'\n'}
         <span className="text-fd-muted-foreground">$ </span>cargo run --release
         {'\n'}
@@ -378,6 +380,7 @@ export function Footer() {
           </p>
         </div>
         <nav className="flex gap-5">
+          <a href="https://github.com/shardreel/clipforge" className="hover:text-fd-foreground">GitHub</a>
           <Link href="/docs" className="hover:text-fd-foreground">Docs</Link>
           <Link href="/docs/guides" className="hover:text-fd-foreground">Guides</Link>
           <Link href="/docs/reference/http-api" className="hover:text-fd-foreground">API</Link>
