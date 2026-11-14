@@ -43,3 +43,13 @@ export function getPageImageUrl(page: { slugs: string[]; locale?: string }) {
 
   return { segments, url: getImageUrl(segments, page.locale) };
 }
+
+export const githubOwner = 'shardreel';
+export const githubRepo = 'clipforge';
+export const githubUrl = `https://github.com/${githubOwner}/${githubRepo}`;
+export const docsRepo = 'shardreel-ui-and-docs';
+export const docsBranch = 'main';
+
+export function getEditUrl(pagePath: string) {
+  return `https://github.com/${githubOwner}/${docsRepo}/edit/${docsBranch}/content/docs/${pagePath}`;
+}

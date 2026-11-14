@@ -4,6 +4,7 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
+  EditOnGitHub,
   MarkdownCopyButton,
   ViewOptionsPopover,
 } from 'fumadocs-ui/layouts/docs/page';
@@ -11,7 +12,7 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
-import { appName, getPageImageUrl, getPageMarkdownUrl, siteUrl } from '@/lib/shared';
+import { appName, getEditUrl, getPageImageUrl, getPageMarkdownUrl, siteUrl } from '@/lib/shared';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -68,6 +69,10 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           })}
         />
       </DocsBody>
+      <div className="mt-8 flex flex-wrap items-center gap-3 border-t pt-6 text-sm">
+        <EditOnGitHub href={getEditUrl(page.path)} />
+        <span className="text-fd-muted-foreground">Spotted a mistake? Suggest a change and open a pull request.</span>
+      </div>
     </DocsPage>
   );
 }
