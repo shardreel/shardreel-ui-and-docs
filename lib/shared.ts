@@ -1,6 +1,29 @@
 import { createGetUrl } from 'fumadocs-core/source';
 
 export const appName = 'shardreel';
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+export const siteTagline = 'AI Gameplay Clipper for Mac: Turn Long Videos into Shorts, Reels and TikToks';
+export const siteDescription =
+  'shardreel is a free, local video clipping tool for Apple Silicon Macs. It finds the best moments in long gameplay recordings and cuts captioned 9:16 clips for YouTube Shorts, Instagram Reels and TikTok. Private, no cloud, no subscription.';
+export const siteKeywords = [
+  'video clipping tool',
+  'AI video clipper',
+  'gameplay clipper',
+  'gameplay highlights generator',
+  'long video to shorts',
+  'YouTube Shorts maker',
+  'TikTok clip maker',
+  'Instagram Reels maker',
+  '9:16 vertical video',
+  'auto captions',
+  'Whisper transcription',
+  'Apple Silicon video editor',
+  'Mac video clipper',
+  'OpusClip alternative',
+  'local video clipper',
+  'open source clipper',
+  'shardreel',
+];
 export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
