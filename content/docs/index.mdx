@@ -1,0 +1,41 @@
+---
+title: Introduction
+description: What shardreel does and how these docs are organised.
+---
+
+shardreel turns long gameplay recordings into vertical 9:16 clips for Shorts, Reels and TikTok. Point it at a video, and it finds the peak moments, adds word-by-word captions, and renders ready-to-upload files.
+
+It runs on Apple Silicon Macs only. Transcription uses Whisper on the GPU through Metal, and encoding uses the Mac media engine through VideoToolbox. There is no cloud renderer and no subscription. An AI model is optional, and only used to rank candidates and write titles.
+
+## What you get
+
+For each video, shardreel writes a folder containing:
+
+- `NN_title.mp4`, a 1080x1920 clip per moment
+- `NN_title.jpg`, a thumbnail taken at the peak
+- `clips.json`, with timestamps, title, hook, hashtags and a ready-to-paste caption
+
+<Callout type="info" title="Two names">
+The product is called shardreel. The Rust engine and the data folder keep their internal name, `clipforge`, which is why you will see `~/.clipforge` and `CLIPFORGE_*` environment variables in these docs.
+</Callout>
+
+## How these docs are organised
+
+<Cards>
+  <Card title="Getting started" href="/docs/getting-started">
+    Install the tools, build the app and run your first job.
+  </Card>
+  <Card title="Guides" href="/docs/guides">
+    Task-based how-tos: layouts, captions, AI ranking, storage.
+  </Card>
+  <Card title="How it works" href="/docs/concepts/how-it-works">
+    The pipeline, moment picking and caching in detail.
+  </Card>
+  <Card title="Reference" href="/docs/reference/options">
+    Every option, setting, file and HTTP route.
+  </Card>
+</Cards>
+
+## Rights
+
+Clip your own gameplay, or streamers who allow it. Many run clipping programs. Reposting other people's streams without permission gets accounts struck.

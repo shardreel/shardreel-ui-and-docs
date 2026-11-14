@@ -1,0 +1,35 @@
+---
+title: Settings and environment
+description: Saved settings and environment variables.
+---
+
+## Settings file
+
+Settings are saved to `~/.clipforge/settings.json`. The UI never shows saved API keys back to you.
+
+| Field | Meaning |
+| --- | --- |
+| `llm` | Default AI provider: `none`, `gemini`, `openrouter`, `lmstudio` or `ollama` |
+| `llm_model` | Default model name, applied to whichever provider is used |
+| `base_url` | Optional OpenAI-compatible endpoint override |
+| `niche` | Default niche context |
+| `gemini_api_key` | Gemini key |
+| `openrouter_api_key` | OpenRouter key |
+
+## Environment variables
+
+Variables can be set in the shell or in [`~/.clipforge/.env`](/docs/guides/env-file).
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | none | Gemini key |
+| `OPENROUTER_API_KEY` | none | OpenRouter key |
+| `CLIPFORGE_LLM_MODEL` | none | Fallback model when no other model is set |
+| `CLIPFORGE_LLM_BASE_URL` | none | Fallback endpoint override |
+| `CLIPFORGE_LLM_API_KEY` | none | Key used for any provider, taking priority over the provider key |
+| `CLIPFORGE_ADDR` | `127.0.0.1:8787` | Address the server listens on |
+| `CLIPFORGE_WEB_DIR` | `web/dist` in the project | Folder of the built UI |
+
+## Precedence
+
+For keys: the settings file, then real environment variables, then `~/.clipforge/.env`. For the model: the job's model field, then the settings file, then `CLIPFORGE_LLM_MODEL`, then the provider default.

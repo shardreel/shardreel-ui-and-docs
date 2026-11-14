@@ -1,0 +1,23 @@
+---
+title: Re-render a job
+description: Try another layout or caption setting without redoing the analysis.
+---
+
+Open a finished job and expand **Re-render with different settings**. The form starts from that job's options. Change what you like and press **Re-render**.
+
+A re-render creates a new job, and the original stays untouched. It is fast because the expensive stages are cached:
+
+| Step | Re-run on re-render? |
+| --- | --- |
+| Download | No, the file is already local |
+| Audio extraction | No |
+| Transcription | No, unless you change the Whisper model |
+| Signal analysis | No |
+| Picking moments | No, unless you change the clip count, min or max length, AI provider, or vision |
+| Rendering | Yes |
+
+Target length, the model name and the niche text are not part of the picks cache key, so changing only those reuses the cached picks. Turn on **Fresh analysis** to ignore every cache and apply them.
+
+<Callout type="warn">
+A re-render needs the original file. If you cleared downloads or uploads from [Storage](/docs/guides/storage), the job reports an error.
+</Callout>

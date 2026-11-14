@@ -1,0 +1,46 @@
+---
+title: Captions and hooks
+description: Word-by-word captions and the on-screen hook banner.
+---
+
+Captions and the hook banner are burned into the video with libass, driven by the word timestamps from Whisper.
+
+<Callout type="warn" title="Needs ffmpeg with libass">
+If your ffmpeg lacks libass, the job log shows `this ffmpeg has no libass: captions skipped` and clips render without text. Install `ffmpeg-full`. See [Getting started](/docs/getting-started).
+</Callout>
+
+## Captions
+
+- Words appear in chunks of up to three, in uppercase.
+- The word being spoken is highlighted and slightly enlarged.
+- A chunk breaks early at punctuation, or after a pause longer than 0.6 seconds.
+- Captions sit 560 px from the bottom edge, or 760 px on the facecam layout.
+
+Turn captions off with the **Captions** switch. They also need speech recognition, so they are unavailable when it is off.
+
+## Hook banner
+
+The hook is a short line of text shown at the top for the first 3.5 seconds, with a quick fade in and out. It is written by the AI model, so it only appears when [AI ranking](/docs/guides/ai-ranking) is on. Without a model, the hook is empty and no banner is drawn.
+
+Turn it off with the **Hook banner** switch.
+
+## Video metadata
+
+By default each clip carries a small tag in its MP4 metadata. There is no watermark on the picture.
+
+| Tag | Value |
+| --- | --- |
+| `comment` | `Built with shardreel` |
+| `title` | The clip title |
+| `description` | The caption: title plus hashtags |
+| video stream `encoder` | `shardreel` |
+
+Turn it off with the **Embed shardreel tag** switch. Upload platforms and re-encodes can strip metadata, so treat it as attribution, not protection. Check a file with:
+
+```bash
+ffprobe -v error -show_entries format_tags:stream_tags -of default=nw=1 clip.mp4
+```
+
+## Loudness
+
+**Normalize loudness** applies a loudnorm filter to a target of -14 LUFS with a -1.5 dB true-peak ceiling. Audio is encoded as AAC at 160 kbit/s and 48 kHz.

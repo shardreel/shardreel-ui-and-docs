@@ -1,0 +1,14 @@
+{
+  "title": "Guides",
+  "pages": [
+    "index",
+    "new-job",
+    "layouts",
+    "captions-and-hooks",
+    "ai-ranking",
+    "env-file",
+    "rerender",
+    "downloads",
+    "storage"
+  ]
+}

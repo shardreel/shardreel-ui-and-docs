@@ -1,0 +1,39 @@
+---
+title: Caching
+description: What is cached, where, and what invalidates it.
+---
+
+Each video gets a work folder under `~/.clipforge/cache`. The folder name is the first 16 hex characters of a SHA-1 hash of the video's full path, size and modification time.
+
+<Files>
+  <Folder name="~/.clipforge/cache" defaultOpen>
+    <Folder name="downloads" />
+    <Folder name="3f9a1c0b77d2e4a8" defaultOpen>
+      <File name="audio.wav" />
+      <File name="transcript_turbo.json" />
+      <File name="signals.json" />
+      <File name="moments_none_8_15_60.json" />
+    </Folder>
+  </Folder>
+</Files>
+
+## What invalidates what
+
+| File | Reused until |
+| --- | --- |
+| `audio.wav` | The video file is newer than it |
+| `transcript_<model>.json` | You pick a different Whisper model |
+| `signals.json` | Never, unless you use Fresh analysis |
+| `moments_<provider>_<count>_<min>_<max>[_v].json` | The provider, clip count, min or max length, or vision setting changes |
+
+Because the folder name includes the path, size and modification time, moving or editing a video starts a new cache.
+
+## Things that do not invalidate
+
+- Changing the **language** reuses an existing transcript for the same model.
+- Changing the target length, model name or niche text reuses cached picks.
+- Layout, captions, hook, loudness, codec and quality never affect the cache, which is why re-rendering is fast.
+
+Turn on **Fresh analysis** to delete the JSON files in a video's folder and recompute them. The extracted audio is kept.
+
+You can clear caches from [Storage](/docs/guides/storage).

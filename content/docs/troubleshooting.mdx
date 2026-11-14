@@ -1,0 +1,72 @@
+---
+title: Troubleshooting
+description: Fixes for the problems you are most likely to hit.
+---
+
+## Captions are missing
+
+The log says `this ffmpeg has no libass: captions skipped`. Your ffmpeg lacks libass. Install the full build and re-run:
+
+```bash
+brew install ffmpeg-full
+```
+
+shardreel prefers it automatically. Settings then shows the libass check as OK.
+
+## A URL download fails
+
+An error such as `HTTP Error 403: Forbidden` comes from the site, not from shardreel. Try these in order:
+
+1. Update yt-dlp: `brew upgrade yt-dlp`.
+2. Try again later, since some sites throttle or change often.
+3. Download the video yourself and use its **local path** instead.
+
+`This video is unavailable` means the video is private, removed or region-locked.
+
+## "set the Gemini API key in Settings"
+
+The job ran with Gemini selected, and no Gemini key was found. A key in the env file does not choose the provider. Select the provider you have a key for in **AI ranking**. For OpenRouter, pick **OpenRouter**. See [AI ranking](/docs/guides/ai-ranking).
+
+## "LLM step failed ... using signal ranking"
+
+The model call reached an error and the run fell back to signals. Check:
+
+- The provider and key match.
+- The model name is valid. On OpenRouter it needs the vendor prefix, for example `google/gemini-3.8-flash`.
+- With Vision on, the model accepts images.
+
+The error text in the log usually names the cause.
+
+## My env file is ignored
+
+Only `~/.clipforge/.env` is read. A `.env` in the project folder is not. Copy it:
+
+```bash
+cp .env ~/.clipforge/.env && chmod 600 ~/.clipforge/.env
+```
+
+## The first run seems stuck
+
+With Whisper on, the first run downloads the model, about 1.6 GB for `large-v3-turbo`. The log shows `model download 10%`, `20%` and so on. Use the `small` model for a much smaller download.
+
+## "no moments found"
+
+The picker found no candidate. This happens with very short, silent or flat footage. Try a shorter minimum length, check that the video has audio, or turn speech recognition on.
+
+## The facecam layout will not start
+
+It needs a webcam region. Press **Pick on frame**, or enter the four fractions. See [Layouts and facecam](/docs/guides/layouts).
+
+## The port is already in use
+
+Run on another address:
+
+```bash
+CLIPFORGE_ADDR=127.0.0.1:9000 cargo run --release
+```
+
+The Vite dev server proxies to port 8787, so for UI development either keep the default or update `web/vite.config.ts`.
+
+## Clearing space fails with a conflict
+
+Storage clearing is blocked while a job is queued or running. Wait for it to finish.

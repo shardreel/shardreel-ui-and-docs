@@ -1,0 +1,50 @@
+---
+title: Moment picking
+description: How shardreel scores seconds and turns peaks into clips.
+---
+
+## The excitement curve
+
+For every second of video, shardreel combines four signals. Each is standardised against the whole video, so the curve measures how unusual a second is within this recording.
+
+| Signal | With speech | Silent footage |
+| --- | --- | --- |
+| Loudness spike | 0.45 | 0.60 |
+| On-screen action | 0.25 | 0.40 |
+| Speech rate (words per second) | 0.15 | 0 |
+| Hype words | 0.15 | 0 |
+
+"With speech" means the transcript contains more than 20 words in total.
+
+Then two adjustments:
+
+- Seconds quieter than -50 dBFS lose 1 point, so silence is never exciting.
+- The curve is smoothed with a three-second average.
+
+### Hype words
+
+Speech scoring counts phrases such as "no way", "oh my god", "let's go", "bro", "holy", "insane", "clutch", "cops", "police", "wanted", "five stars", "crash", "boom", "look at this", "did you see", "bruh" and "lmao". Each match adds to the seconds its segment spans, capped at 3. The list is tuned for GTA-style chaos. Other games work through the loudness and action signals.
+
+## From peaks to windows
+
+shardreel looks for up to twice as many candidates as clips you asked for. For each, it takes the highest remaining peak and builds a window:
+
+1. Aim for the target length, with the peak about 65 percent of the way in. That leaves build-up before the payoff and a short tail for the reaction.
+2. Move the start earlier, never later, to the nearest sentence start within 3 seconds. If there is none, snap to a hard cut within 1.5 seconds.
+3. Move the end later, never earlier, to the nearest sentence end within 3 seconds, or a hard cut within 1.5 seconds. This avoids clipping the payoff.
+4. Keep the snapped window only if its length is within your min and max. Otherwise keep the unsnapped one.
+5. Blank out the window plus 5 seconds on each side so the next candidate comes from elsewhere.
+
+The search stops early when no peak above the minimum score is left.
+
+## Short videos
+
+A video no longer than your minimum length plus one second becomes a single clip covering the whole video.
+
+## Titles without a model
+
+Without AI ranking, a clip's title is the first eight words spoken within 3 seconds of the peak. If nobody spoke, it is `GTA moment #n`. Hashtags default to `#gta6 #gta #gaming #shorts`. Both come from the default GTA-oriented niche, so use AI ranking for other games.
+
+## With AI ranking
+
+The model sees each candidate's time range, peak, signal score and speech, and optionally three frames. It returns the best picks with trimmed times, a score, a title, a hook and hashtags. See [AI ranking](/docs/guides/ai-ranking) for the guard rails.

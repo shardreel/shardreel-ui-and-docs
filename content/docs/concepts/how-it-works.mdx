@@ -1,0 +1,47 @@
+---
+title: How it works
+description: The pipeline from source video to finished clips.
+---
+
+A job moves through six stages. The job page shows the current one, and the log lists what happened.
+
+```txt
+fetch -> audio -> transcribe -> analyse -> pick -> render
+```
+
+## Architecture
+
+shardreel is one Rust process (axum) that serves a JSON API, a live event stream and the built React UI. The heavy tools run as child processes: ffmpeg, ffprobe and yt-dlp. Whisper runs in-process through whisper.cpp bindings. Jobs run one at a time.
+
+## 1. Fetch
+
+A local path is resolved and used in place. A URL is downloaded with yt-dlp, streaming its progress to the UI. The video is probed with ffprobe for duration, size, frame rate, audio and rotation.
+
+## 2. Audio
+
+The soundtrack is extracted to a 16 kHz mono WAV. Whisper needs that format, and it is cheap to analyse. Videos with no audio skip this stage.
+
+## 3. Transcribe
+
+Whisper runs on the Apple GPU through Metal with greedy decoding and no carry-over context between segments. The ggml model downloads once to `~/.clipforge/models`.
+
+Whisper reports token timestamps, and shardreel merges tokens into words: a token starting with a space begins a new word, so contractions like "Let's" stay whole. Segments with no words, or with a single character, are dropped. They are almost always hallucinations on silence, such as a lone "you".
+
+If transcription fails, the job logs the error and continues without speech.
+
+## 4. Analyse
+
+Two per-second signals are computed and cached:
+
+- **Loudness.** RMS level in dBFS over 250 ms windows, keeping the loudest of the four windows in each second, so short bangs count. A **spike** is how much a second exceeds the median level of the surrounding minute.
+- **On-screen action.** ffmpeg's scene-change score, sampled at 4 frames per second on a 256 px wide copy, averaged per second. Scores above 0.35 are also recorded as hard cuts.
+
+## 5. Pick
+
+Signals, speech rate and hype words become one excitement curve, and the highest peaks become candidate windows. See [Moment picking](/docs/concepts/moment-picking). If AI ranking is on, a model then re-ranks the candidates and writes titles.
+
+## 6. Render
+
+Each clip is cut from the source and rendered at 1080x1920 with an ffmpeg filter graph chosen by the layout. Captions and the hook are added as an ASS subtitle file through libass. Audio is loudness-normalised and encoded as AAC. Video uses the hardware H.264 or HEVC encoder, yuv420p, at the source frame rate capped at 60.
+
+When the tag is on, `Built with shardreel`, the title and the caption are written into the file metadata. Several clips render in parallel. A thumbnail is grabbed at each clip's peak, and `clips.json` is written last.

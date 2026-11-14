@@ -1,0 +1,47 @@
+---
+title: Files and folders
+description: Everything shardreel writes to disk.
+---
+
+## Data folder
+
+<Files>
+  <Folder name="~/.clipforge" defaultOpen>
+    <Folder name="cache">
+      <Folder name="downloads" />
+    </Folder>
+    <Folder name="jobs" />
+    <Folder name="models" />
+    <Folder name="uploads" />
+    <File name="settings.json" />
+    <File name=".env" />
+  </Folder>
+</Files>
+
+| Path | Contents |
+| --- | --- |
+| `cache/` | One folder per analysed video, see [Caching](/docs/concepts/caching) |
+| `cache/downloads/` | Videos downloaded from URLs |
+| `jobs/` | One JSON file per finished or failed job |
+| `models/` | Whisper ggml models |
+| `uploads/` | Files uploaded from the browser |
+| `settings.json` | Saved settings |
+| `.env` | Optional keys and defaults |
+
+Jobs that were running when the server stopped are marked failed with `interrupted by restart` the next time it starts.
+
+## Output folder
+
+Clips go to the job's output folder, `~/Movies/clipforge` by default, in a subfolder named after the video.
+
+<Files>
+  <Folder name="gta-session-evening" defaultOpen>
+    <File name="01_cops-chase-ends-in-a-crash.mp4" />
+    <File name="01_cops-chase-ends-in-a-crash.jpg" />
+    <File name="02_five-stars-in-thirty-seconds.mp4" />
+    <File name="02_five-stars-in-thirty-seconds.jpg" />
+    <File name="clips.json" />
+  </Folder>
+</Files>
+
+`clips.json` holds one object per clip: file name, start and end, score, peak, title, hook, hashtags, reason and a ready-to-paste caption.

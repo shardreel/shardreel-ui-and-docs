@@ -1,0 +1,24 @@
+---
+title: Free disk space
+description: See what shardreel stores and clear it from Settings.
+---
+
+Open **Settings** and find the **Storage** card. It lists each kind of stored data with its size, a Clear button for each, and a total.
+
+| Category | Location | After clearing |
+| --- | --- | --- |
+| Downloads | `~/.clipforge/cache/downloads` | URL jobs download again |
+| Analysis cache | `~/.clipforge/cache/<video>/` | Audio, transcript and picks are redone |
+| Uploads | `~/.clipforge/uploads` | Jobs made from uploads cannot be re-rendered |
+| Whisper models | `~/.clipforge/models` | The model downloads again on next use |
+
+Press **Clear**, then **Confirm clear**. The card reports how much space was freed.
+
+## Safety
+
+- Rendered clips in your output folders are never deleted.
+- Videos you used by local path are never deleted.
+- Saved job records are kept.
+- Clearing is blocked while a job is queued or running.
+
+The default `large-v3-turbo` model is about 1.6 GB. Delete it only if you are sure you will not transcribe again soon.

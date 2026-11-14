@@ -1,0 +1,31 @@
+---
+title: URL downloads
+description: How downloads from YouTube, Twitch and other sites work.
+---
+
+Paste a link under **Path or URL**, and shardreel downloads it with yt-dlp before analysis.
+
+## Progress bar
+
+While the job is in the **Fetch** stage, the job page shows a progress bar with:
+
+- the stream being downloaded
+- percent complete
+- downloaded and total size
+- speed and estimated time remaining
+
+Most sites deliver video and audio as two separate streams. The bar fills for **video**, then restarts for **audio**, then yt-dlp merges them into one MP4. When no total size is known, the bar shows downloaded bytes instead of a percentage.
+
+## Format
+
+yt-dlp is asked for the best video up to 1080p, preferring MP4 video with M4A audio, and merges to MP4.
+
+## Where files go
+
+Downloads are kept in `~/.clipforge/cache/downloads`. Free the space any time from [Storage](/docs/guides/storage).
+
+## Playlists
+
+Only the single video in the link is downloaded, never a whole playlist.
+
+If a download fails, see [Troubleshooting](/docs/troubleshooting).

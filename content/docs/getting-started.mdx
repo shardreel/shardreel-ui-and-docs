@@ -1,0 +1,97 @@
+---
+title: Getting started
+description: Install the requirements, build shardreel and run your first job.
+---
+
+<Callout type="warn" title="Apple Silicon only">
+shardreel targets M-series Macs. It relies on Metal for Whisper and VideoToolbox for encoding.
+</Callout>
+
+## Requirements
+
+| Tool | Why it is needed |
+| --- | --- |
+| Rust toolchain | Builds the backend |
+| bun | Builds the web UI |
+| cmake | Builds whisper.cpp, which the Whisper bindings compile |
+| ffmpeg with libass | Decoding, filters, encoding, and burned-in captions |
+| yt-dlp | Downloading videos from URLs |
+
+<Steps>
+<Step>
+
+### Install the command-line tools
+
+```bash
+brew install cmake yt-dlp ffmpeg-full
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -fsSL https://bun.sh/install | bash
+```
+
+`ffmpeg-full` is a keg-only build that includes libass. It does not replace an ffmpeg you already have. shardreel looks for it in `/opt/homebrew/opt/ffmpeg-full/bin` first and falls back to your `PATH`.
+
+</Step>
+<Step>
+
+### Build the web UI
+
+```bash
+cd web
+bun install
+bun run build
+```
+
+</Step>
+<Step>
+
+### Run the app
+
+```bash
+cargo run --release
+```
+
+The first build compiles whisper.cpp and takes a few minutes. When it is ready, the server prints its address:
+
+```txt
+clipforge listening on http://127.0.0.1:8787
+```
+
+</Step>
+<Step>
+
+### Check the setup
+
+Open `http://127.0.0.1:8787` and go to **Settings**. The System card lists each requirement as OK or Missing, with the command that fixes it.
+
+</Step>
+</Steps>
+
+## Run your first job
+
+1. Open **New job**.
+2. Drop in a video, or switch to **Path or URL** and paste a path or a YouTube or Twitch link.
+3. Leave the defaults and press **Generate clips**.
+4. Watch the stages on the job page. When it finishes, play the clips in the grid.
+
+The first job with speech recognition downloads the Whisper model, about 1.6 GB for the default `large-v3-turbo`, into `~/.clipforge/models`. Later runs reuse it.
+
+Clips are saved to `~/Movies/clipforge/` by default, in a folder named after the video. Change the output folder per job.
+
+## Develop the UI
+
+Run the backend and the Vite dev server side by side:
+
+```bash
+cargo run --release
+cd web && bun run dev
+```
+
+Open `http://localhost:5173`. Vite proxies `/api` to the backend on port 8787.
+
+## Next steps
+
+<Cards>
+  <Card title="Pick a layout" href="/docs/guides/layouts" />
+  <Card title="Set up AI ranking" href="/docs/guides/ai-ranking" />
+  <Card title="Understand the pipeline" href="/docs/concepts/how-it-works" />
+</Cards>

@@ -1,0 +1,90 @@
+---
+title: HTTP API
+description: Routes, payloads and the live event stream.
+---
+
+The backend serves a JSON API under `/api`. Errors return a JSON body such as `{"error": "message"}`.
+
+## Jobs
+
+| Method and path | Purpose |
+| --- | --- |
+| `POST /api/jobs` | Create a job. Body: `{ "source": "...", "options": { ... } }`. Options are optional and partial |
+| `GET /api/jobs` | List jobs, newest first, without their logs |
+| `GET /api/jobs/{id}` | One job, with log and clips |
+| `GET /api/jobs/{id}/events` | Live event stream, see below |
+| `POST /api/jobs/{id}/rerender` | Re-run a job's source with new options. Body: `{ "options": { ... } }`. Returns a new job |
+| `GET /api/jobs/{id}/files/{name}` | A clip or thumbnail. Supports range requests |
+
+Jobs run one at a time, in order.
+
+### Job object
+
+```json
+{
+  "id": "a1b2c3d4",
+  "source": "/Users/you/Movies/session.mp4",
+  "options": { "...": "see Job options" },
+  "status": "running",
+  "stage": "transcribe",
+  "progress": null,
+  "log": ["session.mp4  1920x1080 @ 30fps  42.1 min  encoder: h264_videotoolbox"],
+  "clips": [],
+  "out_dir": null,
+  "error": null,
+  "created_at": 1794635690
+}
+```
+
+- `status` is `queued`, `running`, `done` or `failed`.
+- `stage` is `queued`, `fetch`, `audio`, `transcribe`, `analyse`, `pick`, `render` or `done`.
+- `progress` is set during URL downloads: `{ "percent", "downloaded", "total", "speed", "eta", "kind" }`, where `kind` is `video` or `audio`.
+- `created_at` is Unix seconds.
+
+### Events
+
+`GET /api/jobs/{id}/events` is a server-sent event stream. Each message is a JSON object on a `data:` line:
+
+| `type` | Fields | Sent when |
+| --- | --- | --- |
+| `snapshot` | `job` | Once, first |
+| `stage` | `stage` | A new stage starts |
+| `progress` | `progress` | Download progress updates |
+| `log` | `line` | A log line is added |
+| `status` | `status`, optional `error` | The job starts, finishes or fails |
+
+For a job that has already finished, the stream sends only the snapshot.
+
+## Media helpers
+
+| Method and path | Purpose |
+| --- | --- |
+| `POST /api/uploads` | Multipart upload, field `file`. Returns `{ "path", "name" }` |
+| `GET /api/probe?path=` | Duration, width, height, fps and audio flag of a local video |
+| `GET /api/frame?path=&t=` | A JPEG frame, 1280 px wide, at `t` seconds |
+
+## Settings and defaults
+
+| Method and path | Purpose |
+| --- | --- |
+| `GET /api/defaults` | Default options, with your saved provider and niche applied |
+| `GET /api/settings` | Settings without keys, plus `has_gemini_key` and `has_openrouter_key` |
+| `PUT /api/settings` | Update any of `llm`, `llm_model`, `base_url`, `niche`, `gemini_api_key`, `openrouter_api_key`. An empty string clears a key or an optional value |
+| `GET /api/health` | Tool and hardware checks: ffmpeg, ffprobe, yt-dlp, libass, encoder, Whisper model |
+
+## Storage
+
+| Method and path | Purpose |
+| --- | --- |
+| `GET /api/storage` | Sizes for downloads, analysis, uploads and each model, plus a total |
+| `DELETE /api/storage/{kind}` | Clear `downloads`, `analysis`, `uploads`, or a model by file name. Returns `{ "freed": bytes }`. Returns 409 while a job is running |
+
+## Example
+
+```bash
+curl -s -X POST http://127.0.0.1:8787/api/jobs \
+  -H 'content-type: application/json' \
+  -d '{"source": "/Users/you/Movies/session.mp4", "options": {"max_clips": 5}}'
+
+curl -N http://127.0.0.1:8787/api/jobs/a1b2c3d4/events
+```

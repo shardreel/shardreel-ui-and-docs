@@ -1,0 +1,57 @@
+---
+title: Job options
+description: Every option a job accepts, with defaults.
+---
+
+These are the fields of the `options` object sent when creating or re-rendering a job. Any field you omit takes its default.
+
+## Clips and output
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `out` | string | `~/Movies/clipforge` | Output folder |
+| `max_clips` | number | `8` | Clip count |
+| `min_len` | number | `15` | Seconds |
+| `max_len` | number | `60` | Seconds |
+| `target_len` | number | `30` | Seconds |
+
+## Layout
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `layout.mode` | `blur` \| `crop` \| `facecam` \| `fit` | `blur` | |
+| `layout.zoom` | number | `1.35` | Blur only. Values below 1 are treated as 1 |
+| `layout.crop_x` | number | `0.5` | Crop and facecam. 0 is left, 1 is right |
+| `layout.facecam` | `[x, y, w, h]` or null | `null` | Fractions of the frame. Required for facecam, which is in beta |
+| `layout.cam_height` | number | `640` | Facecam panel height out of 1920 |
+
+## Speech
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `asr` | `whisper` \| `none` | `whisper` | |
+| `asr_model` | `turbo` \| `large` \| `small` | `turbo` | |
+| `language` | string or null | `null` | Null auto-detects |
+
+## AI ranking
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `llm` | `none` \| `gemini` \| `openrouter` \| `lmstudio` \| `ollama` | `none` | |
+| `llm_model` | string or null | `null` | Null uses the provider default |
+| `vision` | boolean | `false` | Send frames to the model |
+| `niche` | string | GTA 6 gaming | Context for the model |
+
+## Overlays and encoding
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `subs` | boolean | `true` | Needs libass |
+| `hook` | boolean | `true` | Needs libass and AI ranking |
+| `normalize_audio` | boolean | `true` | -14 LUFS |
+| `embed_tag` | boolean | `true` | Writes the shardreel metadata tag, see [Captions and hooks](/docs/guides/captions-and-hooks) |
+| `codec` | `h264` \| `hevc` | `h264` | |
+| `quality` | `high` \| `medium` \| `low` | `high` | 12, 8 and 5 Mbit/s on hardware |
+| `software` | boolean | `false` | libx264 or libx265, CRF 19, 22 or 25 |
+| `workers` | number | `3` | Parallel renders |
+| `fresh` | boolean | `false` | Ignore caches |

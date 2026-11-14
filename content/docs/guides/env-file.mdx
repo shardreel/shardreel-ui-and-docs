@@ -1,0 +1,29 @@
+---
+title: The env file
+description: Keep API keys and defaults in ~/.clipforge/.env.
+---
+
+You can keep keys out of the UI by putting them in `~/.clipforge/.env`.
+
+```bash title="~/.clipforge/.env"
+GEMINI_API_KEY=your-key
+OPENROUTER_API_KEY=your-key
+CLIPFORGE_LLM_MODEL=google/gemini-3.8-flash
+```
+
+Lock it down, since it holds secrets:
+
+```bash
+chmod 600 ~/.clipforge/.env
+```
+
+## Rules
+
+- Only `~/.clipforge/.env` is read. A `.env` in the project folder is ignored.
+- The file is read at the start of each job, so no restart is needed.
+- Settings shows "A key is set" for keys that come from this file.
+- Lookup order for keys: the Settings page, then real environment variables, then this file.
+- The env file cannot choose the provider. Pick it in the job form or in Settings.
+- `CLIPFORGE_LLM_MODEL` applies to whichever provider you use, and only when the Settings model and the job's model field are both empty. Gemini and OpenRouter name models differently, so leave it unset if you use both.
+
+See [Settings and environment](/docs/reference/settings-and-env) for every variable.

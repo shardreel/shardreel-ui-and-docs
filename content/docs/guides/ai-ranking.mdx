@@ -1,0 +1,68 @@
+---
+title: AI ranking
+description: Let a model re-rank candidates and write titles, hooks and hashtags.
+---
+
+AI ranking is optional. Without it, shardreel ranks moments from audio, visual and speech signals alone, and titles come from the words spoken near the peak. With it, a model sees the candidate windows and picks the best, tightens the cut, and writes a title, hook and hashtags.
+
+If the model call fails for any reason, the run finishes with signal ranking and logs `LLM step failed (...)`. A model problem never loses a run.
+
+## Providers
+
+| Provider | Key | Endpoint |
+| --- | --- | --- |
+| Gemini | `GEMINI_API_KEY` | Google's OpenAI-compatible endpoint |
+| OpenRouter | `OPENROUTER_API_KEY` | `https://openrouter.ai/api/v1` |
+| LM Studio | none | `http://localhost:1234/v1` |
+| Ollama | none | `http://localhost:11434/v1` |
+
+Set a base URL override in Settings to use any other OpenAI-compatible server.
+
+## Set it up
+
+<Steps>
+<Step>
+
+Add a key in **Settings**, or in [the env file](/docs/guides/env-file).
+
+</Step>
+<Step>
+
+Choose the provider in the job form under **AI ranking**. To make it the default, set **Default provider** in Settings and press Save.
+
+</Step>
+<Step>
+
+Leave the model empty to use the provider default, or set a model name. On OpenRouter, use the full vendor and name form.
+
+</Step>
+</Steps>
+
+<Callout type="info" title="OpenRouter model names">
+OpenRouter names include the vendor, such as `google/gemini-3.8-flash`, which is also the built-in default. If you set your own model, use the full vendor and name form, or the call fails and the run falls back to signal ranking.
+</Callout>
+
+The provider is chosen in the UI. A key in the env file does not select it. A job started with the wrong provider reports `set the Gemini API key in Settings`, or the matching OpenRouter message.
+
+## Choosing a model
+
+Each video is one request holding a few thousand tokens of text, plus a few more thousand if vision is on. Cost is small even for a premium model, so favour quality over the cheapest tier. A current Flash-class model works well: for example `gemini-3.8-flash` on Gemini directly, or `google/gemini-3.8-flash` on OpenRouter. Model names and prices change, so check your provider's list.
+
+## Vision
+
+Turn on **Vision** to send three small frames of each candidate along with its speech. It helps for silent or low-commentary gameplay, where the audio alone says little. The model must accept images.
+
+## Niche context
+
+The **Niche context** text tells the model what game and audience the clips are for. The default targets GTA 6 and gaming TikTok and Shorts. Edit it to be specific, for example the game mode and the audience age range. This tends to improve picks more than switching models.
+
+## What the model can and cannot change
+
+The model returns a start and end for each pick, and shardreel checks them against guard rails:
+
+- The start must fall between 10 seconds before the candidate's start and 1 second before the peak.
+- The end must fall between 2.5 seconds after the peak and 10 seconds after the candidate's end.
+- Anything outside those limits is reset to the candidate's own bound.
+- Lengths are then clamped to your min and max.
+
+Picks that overlap by more than 40 percent of the shorter clip are dropped, and the list is cut to your clip count.
